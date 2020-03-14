@@ -155,7 +155,7 @@ ch.onMessageReceived = function(channel, message) {
 						}
 					})
 					.then((response) => {
-						sendMsgWithChannel(channel, response.data.list[0].definition);
+						sendMsgWithChannel(channel, `${stringFromList(args)} means: \n\n${response.data.list[0].definition}`);
 					}).catch((error) => {
 						console.warn(error);
 					})
