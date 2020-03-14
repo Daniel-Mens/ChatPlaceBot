@@ -1,0 +1,17 @@
+{
+  "name": "ChatPlaceBot",
+  "version": "1.0.0",
+  "description": "u/aWildGeodudeAppeared's venture into making a reddit chat bot. Mainly for r/TheChatPlace, but it's used in many other chats.",
+  "main": "main.js",
+  "private": false,
+  "dependencies": {
+    "axios": "0.19.2",
+    "cheerio": "0.22.0",
+    "dotenv": "8.2.0",
+    "form-data": "3.0.0",
+    "got": "10.6.0",
+    "lyricist": "2.2.2",
+    "sendbird": "3.0.117",
+    "tough-cookie": "3.0.1"
+  }
+}

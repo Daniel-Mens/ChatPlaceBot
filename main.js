@@ -640,7 +640,7 @@ handler.onUserReceivedInvitation = (channel, inviter, invitees) => {
 		channel.acceptInvitation();
 		console.log(`I've accepted the invite to ${channel.name}!`);
 		sendMsgWithChannel(channel, helpMessage);
-	})
+	}
 };
 sb.addChannelHandler("vsdfh64mc93mg0cn367vne4m50bn3b238", ch);
 var messageInterval = setInterval(function() {
