@@ -18,7 +18,7 @@ let credentials = {
 	username: process.env.REDDIT_USER,
 	passwd: process.env.REDDIT_PASS,
 }
-var sb = new sendbird({
+let sb = new sendbird({
 	appId: "2515BDA8-9D3A-47CF-9325-330BC37ADA13"
 });
 const form = new FormData();
@@ -42,13 +42,13 @@ got.post({
 		sb.connect(credentials.userid, sbInfo.sb_access_token).then(userInfo => {
 			console.log("Successfully connected to sendbird with u/" + userInfo.nickname + "!");
 		}).catch(err => {
-			console.log("Error while trying to connect to sendbird. Error: " + err);
+			console.error("Error while trying to connect to sendbird. Error: " + err);
 		});
 	}).catch(err => {
-		console.log("Error while trying to get access token. Error: " + err);
+		console.error("Error while trying to get access token. Error: " + err);
 	});
 }).catch(err => {
-	console.log("Error while trying to get session token. Error: " + err);
+	console.error("Error while trying to get session token. Error: " + err);
 });
 lrcst._request = async function(path) {
 	// changed so the URL is made URL-y
@@ -71,18 +71,21 @@ const lyricist = new lrcst(process.env.GENIUS_TOKEN);
 
 
 let donators = JSON.parse(fs.readFileSync("donators.json"));
+
 // Credit to https://github.com/joshbuchea/yo-mama for the yo mama jokes.
 let allYoMamaJokes = JSON.parse(fs.readFileSync("joe-mama.json"));
+
 let miscCommands = JSON.parse(fs.readFileSync("MiscCommands.json"));
 let helpMessage = fs.readFileSync("help.txt", encoding = "utf8");
+let stats = JSON.parse(fs.readFileSync("stats.json"))
 
-var newsMessageMessage = "TOP NEWS MESSAGE OF THE DAY: " + os.EOL + "Post Title: %(NEWSMESSAGETITLE)" + os.EOL + "Post Content: %(NEWSMESSAGELINK)" + os.EOL + "Link To Post: %(NEWSMESSAGELINKTOPOST)";
+let newsMessageMessage = "TOP NEWS MESSAGE OF THE DAY: " + os.EOL + "Post Title: %(NEWSMESSAGETITLE)" + os.EOL + "Post Content: %(NEWSMESSAGELINK)" + os.EOL + "Link To Post: %(NEWSMESSAGELINKTOPOST)";
 
-var ch = new sb.ChannelHandler();
+let ch = new sb.ChannelHandler();
 
-var newsMessage = async (count, channelUrl, channel) => {
+let newsMessage = async (count, channelUrl, channel) => {
 	if (isUndefined(channelUrl)) {
-		var channelListQuery = sb.GroupChannel.createMyGroupChannelListQuery();
+		let channelListQuery = sb.GroupChannel.createMyGroupChannelListQuery();
 		channelListQuery.includeEmpty = true;
 		channelListQuery.limit = 100;
 
@@ -93,13 +96,13 @@ var newsMessage = async (count, channelUrl, channel) => {
 					return;
 				}
 				axios.get("http://www.reddit.com/r/news/top.json?limit=" + count.toString()).then((newsPostJson) => {
-					var newsPost = newsPostJson.data.data.children[Math.floor(Math.random() * newsPostJson.data.data.children.length)].data;
+					let newsPost = newsPostJson.data.data.children[Math.floor(Math.random() * newsPostJson.data.data.children.length)].data;
 					newMessage = makerandomthing(7) + newMessage;
-					var newMessage = newsMessageMessage.replace("%(NEWSMESSAGETITLE)", newsPost.title);
+					let newMessage = newsMessageMessage.replace("%(NEWSMESSAGETITLE)", newsPost.title);
 					newMessage = newMessage.replace("%(NEWSMESSAGELINK)", newsPost.url);
 					newMessage = newMessage.replace("%(NEWSMESSAGELINKTOPOST)", "https://reddit.com" + newsPost.permalink);
 					newMessage = newMessage + makerandomthing(7);
-					for (var i = 0; i < channelList.length; i++) {
+					for (let i = 0; i < channelList.length; i++) {
 						setTimeout(() => {
 							channelList[i].sendUserMessage(newMessage, (message, error) => {
 								if (error) {
@@ -113,34 +116,42 @@ var newsMessage = async (count, channelUrl, channel) => {
 		}
 	} else {
 		axios.get("http://www.reddit.com/r/news/top.json?limit=" + count.toString()).then((newsPostJson) => {
-			var newsPost = newsPostJson.data.data.children[Math.floor(Math.random() * newsPostJson.data.data.children.length)].data;
-			var newMessage = newsMessageMessage.replace("%(NEWSMESSAGETITLE)", newsPost.title);
+			let newsPost = newsPostJson.data.data.children[Math.floor(Math.random() * newsPostJson.data.data.children.length)].data;
+			let newMessage = newsMessageMessage.replace("%(NEWSMESSAGETITLE)", newsPost.title);
 			newMessage = newMessage.replace("%(NEWSMESSAGELINK)", newsPost.url);
 			newMessage = newMessage.replace("%(NEWSMESSAGELINKTOPOST)", "https://reddit.com" + newsPost.permalink);
 			sendMsgWithChannel(channel, newMessage)
 		});
 	}
 }
-var currentAnswer = {};
-var timeOfSendingOfLastTrivia = {};
-var currentTrustfaller = {};
-var triviaMessage = "TRIVIA!" + os.EOL + "Category: %(CATEGORY)" + os.EOL + "Difficulty: %(DIFFICULTY)" + os.EOL + "QUESTION: %(QUESTION)" + os.EOL + "%(ANSWERS)";
+let currentAnswer = {};
+let timeOfSendingOfLastTrivia = {};
+let currentTrustfaller = {};
+let triviaMessage = "TRIVIA!" + os.EOL + "Category: %(CATEGORY)" + os.EOL + "Difficulty: %(DIFFICULTY)" + os.EOL + "QUESTION: %(QUESTION)" + os.EOL + "%(ANSWERS)";
 ch.onMessageReceived = function(channel, message) {
-	var messageText = message.message;
+	if (message._sender.userId != sb.currentUser.userId) {
+		addToStats(message._sender.nickname, message.channelUrl, 1);
+	}
+	let messageText = message.message;
 	if (messageText.toLowerCase().includes("@all")) {
 		sendMsgWithChannel(channel, madAtAllTagging[Math.floor(Math.random() * madAtAllTagging.length)]);
 	}
 	if (messageText.startsWith("/")) {
-		var cleanMessageText = messageText.toLowerCase().slice(1).trim();
-		var args = messageText.split(" ").slice(1);
-		var command = cleanMessageText.split(" ")[0];
+		let cleanMessageText = messageText.toLowerCase().slice(1).trim();
+		let args = messageText.split(" ").slice(1);
+		let command = cleanMessageText.split(" ")[0];
 		switch (command) {
+			case "liststats":
+			case "getstats":
+			case "stats":
+				sendMsgWithChannel(channel, `Top 10 in ${channel.name}:${getTopInStats(message.channelUrl,10)}`);
+				break;
 			case "moderators":
 			case "mods":
-				var operatorListQuery = channel.createOperatorListQuery();
-				var msg = "The moderators of " + channel.name + " are: ";
+				let operatorListQuery = channel.createOperatorListQuery();
+				let msg = "The moderators of " + channel.name + " are: ";
 				operatorListQuery.next(function(mods) {
-					for (var mod of mods) {
+					for (let mod of mods) {
 						if (mod.userId == sb.currentUser.userId) {
 							msg = msg + "\n- ChatPlaceBot (This means that moderator commands are possible)"
 						} else {
@@ -153,12 +164,12 @@ ch.onMessageReceived = function(channel, message) {
 			case "ban":
 			case "gulag":
 				try {
-					var operatorListQuery = channel.createOperatorListQuery();
+					let operatorListQuery = channel.createOperatorListQuery();
 					operatorListQuery.next(function(ops) {
 						if (userListContainsUser(ops, message._sender)) {
 							if (userListContainsUser(ops, sb.currentUser)) {
 								if (args.length < 3) {
-									var problem = ""
+									let problem = ""
 									switch (args.length) {
 										case 0:
 											problem = "\nYour problem was that you didn't define anything.";
@@ -172,21 +183,21 @@ ch.onMessageReceived = function(channel, message) {
 									}
 									sendMsgWithChannel(channel, "The Command Syntax Is Wrong. Correct Syntax: \n/gulag [Person to send to the Gulag] [Length] [Possible Units: YEARS/Y | MONTHS/M | DAYS/D | HOURS/H | MINUTES/MIN | SECONDS/S]" + problem);
 								} else {
-									var reasonForBan = "No reason defined.";
+									let reasonForBan = "No reason defined.";
 									if (args.length > 3) {
 										reasonForBan = stringFromList(args.slice(3));
 									}
 									if (args[0].startsWith("u/")) {
 										args[0] = args[0].slice(2);
 									}
-									var participantList = channel.members;
-									var userToBan;
-									for (var participant of participantList) {
+									let participantList = channel.members;
+									let userToBan;
+									for (let participant of participantList) {
 										if (participant.nickname.toLowerCase() == args[0].toLowerCase()) {
 											userToBan = participant.userId;
 										}
 									}
-									var multiplier = 1;
+									let multiplier = 1;
 									switch (args[2].toUpperCase()) {
 										case "Y":
 										case "YEAR":
@@ -271,7 +282,7 @@ ch.onMessageReceived = function(channel, message) {
 				break;
 			case "botinfo":
 				sendMsgWithChannel(channel, "A bot made by u/aWildGeodudeAppeared, for r/TheChatPlace." + os.EOL + os.EOL + version + os.EOL + os.EOL +
-					" Donate at https://streamlabs.com/danielmensyt/tip (Via Skrill) " + os.EOL + "Make sure to include your u/ in the donation, so you get premium perks. These include: " + os.EOL +
+					" Donate at https://streamlabs.com/danielmensyt/tip (NOT WORKING D:) " + os.EOL + "Make sure to include your u/ in the donation, so you get premium perks. These include: " + os.EOL +
 					"The /setdescription command!");
 				break;
 			case "commands":
@@ -288,7 +299,7 @@ ch.onMessageReceived = function(channel, message) {
 				} else {
 					if (args[0].startsWith("u/"))
 						args[0] = args[0].slice(2);
-					var newTitle = stringFromList(messageText.split(" ").slice(2)).trim();
+					let newTitle = stringFromList(messageText.split(" ").slice(2)).trim();
 					setTitle(args[0].toLowerCase(), newTitle.trim());
 					sendMsgWithChannel(channel, args[0] + "'s title has been succesfully set to: " + newTitle);
 				}
@@ -329,7 +340,7 @@ ch.onMessageReceived = function(channel, message) {
 				} else if (isUndefined(args[0])) {
 					sendMsgWithChannel(channel, "You need to specify a description, silly!");
 				} else {
-					var newDescription = stringFromList(messageText.split(" ").slice(1)).trim();
+					let newDescription = stringFromList(messageText.split(" ").slice(1)).trim();
 					setDescription(message._sender.nickname.toLowerCase(), newDescription.trim());
 					sendMsgWithChannel(channel, "Your description has been succesfully set to: " + os.EOL + newDescription);
 				}
@@ -356,11 +367,11 @@ ch.onMessageReceived = function(channel, message) {
 					sendMsgWithChannel(channel, "You have to at least define the gamemode!");
 					return;
 				}
-				var nicknameToSetTo = message._sender.nickname;
+				let nicknameToSetTo = message._sender.nickname;
 				if (!isUndefined(args[1])) {
 					nicknameToSetTo = args[1];
 				}
-				var gamemode = "ERROR";
+				let gamemode = "ERROR";
 				switch (args[0]) {
 					case "0":
 						gamemode = "survival";
@@ -426,10 +437,10 @@ ch.onMessageReceived = function(channel, message) {
 				break;
 			default:
 				if (!isUndefined(miscCommands[command.toLowerCase()])) {
-					var returning = miscCommands[command.toLowerCase()][Math.floor(Math.random() * miscCommands[command.toLowerCase()].length)];
-					var allArgsList = messageText.split(" ").slice(1);
-					var allArgsString = stringFromList(allArgsList);
-					var allArgsFromOneString = stringFromList(allArgsList.slice(1));
+					let returning = miscCommands[command.toLowerCase()][Math.floor(Math.random() * miscCommands[command.toLowerCase()].length)];
+					let allArgsList = messageText.split(" ").slice(1);
+					let allArgsString = stringFromList(allArgsList);
+					let allArgsFromOneString = stringFromList(allArgsList.slice(1));
 					returning = returning.replace("%(SENDER)", message._sender.nickname);
 					returning = returning.replace("%(ARG1)", args[0]);
 					returning = returning.replace("%(ARG2)", args[1]);
@@ -445,7 +456,7 @@ ch.onMessageReceived = function(channel, message) {
 }
 
 function userListContainsUser(userList, user) {
-	for (var userToCheck of userList) {
+	for (let userToCheck of userList) {
 		if (userToCheck.userId == user.userId) {
 			return true;
 		}
@@ -453,8 +464,8 @@ function userListContainsUser(userList, user) {
 }
 
 function stringFromList(list) {
-	var returning = "";
-	for (var i = 0; i < list.length; i++) {
+	let returning = "";
+	for (let i = 0; i < list.length; i++) {
 		returning += list[i] + " ";
 	}
 	return returning;
@@ -466,7 +477,7 @@ function isUndefined(thing) {
 
 async function getDescription(nick, callback) {
 	fs.readFile("descriptions.json", (err, data) => {
-		var descriptions = JSON.parse(data);
+		let descriptions = JSON.parse(data);
 		if (isUndefined(descriptions[nick])) {
 			callback("This person doesn't have a description.", false)
 			return;
@@ -477,7 +488,7 @@ async function getDescription(nick, callback) {
 
 async function setDescription(nick, newDescription) {
 	fs.readFile("descriptions.json", (err, data) => {
-		var descriptions = JSON.parse(data);
+		let descriptions = JSON.parse(data);
 		descriptions[nick] = newDescription;
 		fs.writeFile("descriptions.json", JSON.stringify(descriptions), (err) => {
 			if (err) {
@@ -489,7 +500,7 @@ async function setDescription(nick, newDescription) {
 
 async function getTitle(nick, callback) {
 	fs.readFile("titles.json", (err, data) => {
-		var currentTitles = JSON.parse(data);
+		let currentTitles = JSON.parse(data);
 		if (isUndefined(currentTitles[nick])) {
 			callback("This person doesn't have a title.")
 			return;
@@ -500,7 +511,7 @@ async function getTitle(nick, callback) {
 
 async function setTitle(nick, newTitle) {
 	fs.readFile("titles.json", (err, data) => {
-		var currentTitles = JSON.parse(data);
+		let currentTitles = JSON.parse(data);
 		if (isUndefined(currentTitles[nick])) {
 			currentTitles[nick] = {
 				t: newTitle
@@ -528,26 +539,26 @@ function sendMsgWithChannel(channel, msg) {
 function trivia(channelUrl, channel) {
 	if (timeOfSendingOfLastTrivia[channelUrl] + 60000 < Date.now() || isUndefined(timeOfSendingOfLastTrivia[channelUrl])) {
 		axios.get("http://opentdb.com/api.php?amount=1").then((requestJson) => {
-			var result = requestJson.data.results[0];
+			let result = requestJson.data.results[0];
 			result.question = unescapeHTML(result.question);
-			var newMessage = triviaMessage.replace("%(CATEGORY)", result.category);
+			let newMessage = triviaMessage.replace("%(CATEGORY)", result.category);
 			newMessage = newMessage.replace("%(DIFFICULTY)", result.difficulty);
 			if (result.type == "boolean") {
 				newMessage = newMessage.replace("%(QUESTION)", "Yes Or No: " + result.question);
 				newMessage = newMessage.replace("%(ANSWERS)", "");
 			} else {
 				newMessage = newMessage.replace("%(QUESTION)", result.question);
-				var answers = [];
+				let answers = [];
 				answers.push(result.correct_answer);
-				for (var o of result.incorrect_answers) {
+				for (let o of result.incorrect_answers) {
 					answers.push(o);
 				}
 				for (let i = answers.length - 1; i > 0; i--) {
 					let j = Math.floor(Math.random() * (i + 1));
 					[answers[i], answers[j]] = [answers[j], answers[i]];
 				}
-				var answersString = "";
-				for (var i = 0; i < answers.length; i++) {
+				let answersString = "";
+				for (let i = 0; i < answers.length; i++) {
 					if (i != 0) {
 						answersString += ", ";
 					}
@@ -594,7 +605,7 @@ function tanswer(channelUrl, channel) {
 }
 
 function unescapeHTML(str) {
-	var htmlEntities = {
+	let htmlEntities = {
 		nbsp: ' ',
 		cent: '¢',
 		pound: '£',
@@ -611,7 +622,7 @@ function unescapeHTML(str) {
 		Prime: "\""
 	};
 	return str.replace(/\&([^;]+);/g, function(entity, entityCode) {
-		var match;
+		let match;
 
 		if (entityCode in htmlEntities) {
 			return htmlEntities[entityCode];
@@ -625,24 +636,86 @@ function unescapeHTML(str) {
 	});
 }
 
+function addToStats(username, channelUrl, amountToAdd) {
+	if (isUndefined(stats[channelUrl])) {
+		stats[channelUrl] = {};
+	}
+	if (isUndefined(stats[channelUrl][username])) {
+		stats[channelUrl][username] = 0;
+	}
+	return stats[channelUrl][username] += amountToAdd;
+}
+
 function makerandomthing(length) {
-	var result = '';
-	var characters = '~-+=';
-	var charactersLength = characters.length;
-	for (var i = 0; i < length; i++) {
+	let result = '';
+	let characters = '~-+=';
+	let charactersLength = characters.length;
+	for (let i = 0; i < length; i++) {
 		result += characters.charAt(Math.floor(Math.random() * charactersLength));
 	}
 	return result;
 }
+
+function getTopInStats(channelUrl, amountToGet) {
+	if (isUndefined(stats[channelUrl])) {
+		return "Nobody's chatted in this chat yet.";
+	}
+	let sortedStats = sort(stats[channelUrl]).reverse().slice(0, amountToGet);
+	let endString = "";
+	for (let person of sortedStats) {
+		endString = endString + `\n- ${person.name} with ${person.val}!`;
+	}
+	return endString;
+}
+
+function sort(obj) {
+	let arr = [];
+	for (let name in obj) {
+		arr.push({
+			name,
+			val: obj[name]
+		})
+	}
+	let len = arr.length;
+	for (let i = len - 1; i >= 0; i--) {
+		for (let j = 1; j <= i; j++) {
+			if (arr[j - 1].val > arr[j].val) {
+				let temp = arr[j - 1];
+				arr[j - 1] = arr[j];
+				arr[j] = temp;
+			}
+		}
+	}
+	return arr;
+}
+
 ch.onUserReceivedInvitation = (channel, inviter, invitees) => {
-	if (invitees.map(invitee => invitee.nickname).includes(client.nickname)) {
+	if (userListContainsUser(invitees, sb.currentUser)) {
 		console.log("I've been invited to a channel! :D");
-		channel.acceptInvitation();
+		channel.acceptInvitation(function() {
+			sendMsgWithChannel(channel, "Hi! I'm ChatPlaceBot. I got invited to this chat. To get help using me, do /help.");
+		});
 		console.log(`I've accepted the invite to ${channel.name}!`);
-		sendMsgWithChannel(channel, helpMessage);
 	}
 };
 sb.addChannelHandler("vsdfh64mc93mg0cn367vne4m50bn3b238", ch);
-var messageInterval = setInterval(function() {
+let messageInterval = setInterval(function() {
+	console.log("News messages are being sent! Also, saving the stats in case anything happens.");
+	fs.writeFileSync("stats.json", JSON.stringify(stats));
 	newsMessage(1);
-}, 1000 * 60 * 60 * 24)
+}, 1000 * 60 * 60 * 24);
+
+function exitHandler(exit) {
+	fs.writeFileSync("stats.json", JSON.stringify(stats));
+	if (exit) process.exit();
+}
+
+process.on('exit', exitHandler.bind(false));
+process.on('SIGINT', exitHandler.bind(true));
+process.on('SIGUSR1', exitHandler.bind(true));
+process.on('SIGUSR2', exitHandler.bind(true));
+process.on('uncaughtException', (err, origin) => {
+	console.error(err);
+	console.error(origin);
+	exitHandler.bind(true);
+});
