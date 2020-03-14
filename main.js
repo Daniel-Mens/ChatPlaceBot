@@ -519,7 +519,7 @@ async function setTitle(nick, newTitle) {
 function sendMsgWithChannel(channel, msg) {
 	channel.sendUserMessage(msg, (message, error) => {
 		if (error) {
-			console.warn("An error occured while trying to send \"" + msg + "\" in the channel " + JSON.stringify(channel, null, 1));
+			console.warn(`An error occured while trying to send "${msg}" in the channel ${channel.name}`);
 			console.warn(error);
 		}
 	});
@@ -634,7 +634,7 @@ function makerandomthing(length) {
 	}
 	return result;
 }
-handler.onUserReceivedInvitation = (channel, inviter, invitees) => {
+ch.onUserReceivedInvitation = (channel, inviter, invitees) => {
 	if (invitees.map(invitee => invitee.nickname).includes(client.nickname)) {
 		console.log("I've been invited to a channel! :D");
 		channel.acceptInvitation();
