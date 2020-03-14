@@ -1,5 +1,4 @@
-You’ve come to the help page! Here you can find commands that can help you experience
-TheChatPlace Bot to the fullest!
+You’ve come to the help page! Here you can find commands that can help you experience ChatPlaceBot to the fullest!
 List:
 1. /fbi – for Pedophiles.
 2. /cricket – for bad jokes.
@@ -87,11 +86,13 @@ SPICY COMMANDS
 - /trustfall - Start a trustfall, you hit the ground after 10 seconds unless someone catches you.
 - /catch – Catches the person who just trustfell
 - /gulag <Person to send to the Gulag> <Length> <Possible Units: YEARS/Y | MONTHS/M | DAYS/D | HOURS/H | MINUTES/MIN | SECONDS/S> [OPTIONAL: Reason] – A command only available if it's invoked by a moderator, and if the bot is set as a moderator. Alias: /ban
-- NEW! /getdescription <u/> - PUBLIC! Get somebody's description.
-- NEW! /setdescription <Your new description> - DONATOR-ONLY! Sets your description to the specified description.
+- /getdescription <u/> - PUBLIC! Get somebody's description.
+- /setdescription <Your new description> - DONATOR-ONLY! Sets your description to the specified description.
+- NEW /stats – Get the top 10 chatters in a room - Credit to BATMAN_5777 for the suggestion :D
+- NEW /urban <term> – Get the Urban Dictionary definition of something.
 
 A bot made by u/aWildGeodudeAppeared, for r/TheChatPlace.
 version: 0.5
-Donate at https://streamlabs.com/danielmensyt/tip (Via Skrill) if you like the Bot!
+Donate at https://streamlabs.com/danielmensyt/tip (NOT WORKING D:) if you like the Bot!
 Make sure to include your u/ in the donation, so you get premium perks. These include:
 The /setdescription command!

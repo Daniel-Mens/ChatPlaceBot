@@ -141,6 +141,25 @@ ch.onMessageReceived = function(channel, message) {
 		let args = messageText.split(" ").slice(1);
 		let command = cleanMessageText.split(" ")[0];
 		switch (command) {
+			case "urban":
+				axios({
+						"method": "GET",
+						"url": "https://mashape-community-urban-dictionary.p.rapidapi.com/define",
+						"headers": {
+							"content-type": "application/octet-stream",
+							"x-rapidapi-host": "mashape-community-urban-dictionary.p.rapidapi.com",
+							"x-rapidapi-key": process.env.URBAN_KEY
+						},
+						"params": {
+							"term": stringFromList(args)
+						}
+					})
+					.then((response) => {
+						sendMsgWithChannel(channel, response.data.list[0].definition);
+					}).catch((error) => {
+						console.warn(error);
+					})
+				break;
 			case "liststats":
 			case "getstats":
 			case "stats":
