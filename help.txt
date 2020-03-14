@@ -1,0 +1,97 @@
+You’ve come to the help page! Here you can find commands that can help you experience
+TheChatPlace Bot to the fullest!
+List:
+1. /fbi – for Pedophiles.
+2. /cricket – for bad jokes.
+3. /sneeze – If you have allergies.
+4. /cough – If you have a sore throat.
+5. /dab – Lame Dead Meme Retard!
+6. /naenae – Lame Dead Meme Retard!
+7. /fart – Rip one out right away!
+8. /cry – Sadness is my only emotion.
+9. /wheeze – Lol it wasn’t even that funny.
+10. /belch – BLAAAARGHH!
+11. /pout – This isn’t Instagram thot.
+12. /squat - Eat dat mayonez
+13. /cringe – Lol Bruh, dat Cringe af.
+14. /scream – LET IT OUT!
+15. /reee – DO IT!
+16. /wryy – Why is this a command?
+17. /vsco - Sksksksksksksk
+18. /psspss - PssPssPssPss
+19. /oink – Do it PIG.
+20. /crabrave – Its not a bad song. Right?
+21. /amen – for children of Jesus.
+22. /shrekapproves – Shrek is life.
+23. /devitoapproves – Danny is God.
+24. /johnpissed – RUN!
+25. /surprise – LAME DEAD MEME BRUH!
+26. /hitler – The jews better run!
+27. /ghey – The mods’ favourite.
+28. /yeeeeeeet – Yaaaa Yeet
+29. /stare <object being stared at> – Stare.
+30. /holdback – HOLD HIM BACK!
+31. /rage – LET IT OUT!
+32. /challenge <Object being challenged> – I CHALLENGE THEE!
+33. /quickscope <thing being quickscoped> – The BO-II days lit.
+34. /roast <roastee>– A nice Char is good on you!
+35. /protecc <proteccee> – Too precious to lose!
+36. /attacc <attaccee>– Too precious to be taken away!
+37. /commie – DO IT!
+38. /punch <puncher> <victim>  – Don’t fite pliz.
+39. /kick <kicker> <victim> – Don’t fite pliz.
+40. /dropkick <kicker> <victim> – Don’t fite pliz.
+41. /fatality <Deliverer> <Victim> – He gonna feel that.
+42. /throw <object> <victim>– Yeet something.
+43. /feed <receiver> <food> – Feeding mouths is a hobby.
+44. /scoff <object being scoffed at> – Scoff.
+45. /blush – Stahp it! You make me red!
+46. /tongue – Not the kind you’re thinkin of.
+47. /laugh – It’s not that funny.
+48. /nervous - Ummmmmmmmmm
+49. /scared <object of terror> – I’m afraid. Help.
+50. /shocked – WOW ,THAT’S NOT COOL.
+51. /betrayed <betrayer>  – HOW COULD YOU DO THIS!
+52. /hug <the worthy one> – C’mere you little shit!
+53. /f – Respects.
+54. /pat <The one who loves headpats> – IM NOT YOUR PET!
+55. /kiss <The poor person receiving it> – DO IT!
+56. /thirsty <u/> – DAT BOI BE THIRSTY!
+57. /gamerule <gamerule> <value> – Minecraft reference.
+58. /whatislove – Come on, the song is catchy!
+59. /rng – Roll the dice!
+60. /lonely - feelsBadMan
+61. /dance - He just vibin'
+62. /smack <u/> - give em a smack in the face
+63. /stab <u/> - just take a jab at someone
+64. /kill <u/> - WHAT THE FUCK MAN
+65. /love <loved> – <3.
+66. /give <u/> <item> <amount> – eBic gamer Minecraft reference.
+67. /zoinks <thing getting nuked> - Only using zero point three percent of his power.
+68. /vibin - Chill out bro.
+69. /nice - niicceeeeee
+70. /gamemode <new gamemode> [optional: u/] - Sets your gamemode
+71. /high5 <u/> - Bro..
+
+SPICY COMMANDS
+- /help – Displays this page.
+- /botinfo – info about ME!
+- /rules - Displays the rules of TheChatPlace
+- /mods - Displays the mods of the chat it was sent in. Alias: /moderators
+- /news – gets a news post from today.
+- /yomama – Says a Yo Mama Joke.
+- /trivia – Starts a trivia question.
+- /tanswer – Gives the answer to that trivia question. (It has a timer delay)
+- /gettitle <u/> - Gives that user’s title given to them by a bot moderator/admin.
+- /getlyrics <song> - Get the lyrics of a song. It mostly just gets the wrong song tho
+- /trustfall - Start a trustfall, you hit the ground after 10 seconds unless someone catches you.
+- /catch – Catches the person who just trustfell
+- /gulag <Person to send to the Gulag> <Length> <Possible Units: YEARS/Y | MONTHS/M | DAYS/D | HOURS/H | MINUTES/MIN | SECONDS/S> [OPTIONAL: Reason] – A command only available if it's invoked by a moderator, and if the bot is set as a moderator. Alias: /ban
+- NEW! /getdescription <u/> - PUBLIC! Get somebody's description.
+- NEW! /setdescription <Your new description> - DONATOR-ONLY! Sets your description to the specified description.
+
+A bot made by u/aWildGeodudeAppeared, for r/TheChatPlace.
+version: 0.5
+Donate at https://streamlabs.com/danielmensyt/tip (Via Skrill) if you like the Bot!
+Make sure to include your u/ in the donation, so you get premium perks. These include:
+The /setdescription command!
