@@ -1,5 +1,4 @@
-You’ve come to the help page! Here you can find commands that can help you experience ChatPlaceBot to the fullest!
-List:
+List of simple commands:
 1. /fbi – for Pedophiles.
 2. /cricket – for bad jokes.
 3. /sneeze – If you have allergies.
@@ -58,7 +57,7 @@ List:
 56. /thirsty <u/> – DAT BOI BE THIRSTY!
 57. /gamerule <gamerule> <value> – Minecraft reference.
 58. /whatislove – Come on, the song is catchy!
-59. /rng – Roll the dice!
+59. /high5 <u/> - Bro..
 60. /lonely - feelsBadMan
 61. /dance - He just vibin'
 62. /smack <u/> - give em a smack in the face
@@ -70,9 +69,7 @@ List:
 68. /vibin - Chill out bro.
 69. /nice - niicceeeeee
 70. /gamemode <new gamemode> [optional: u/] - Sets your gamemode
-71. /high5 <u/> - Bro..
-
-SPICY COMMANDS
+71. /8ball – Shake the magic eight ball! SPLIT-INTO-MULTIPLE-MESSAGES-HERESPICY COMMANDS
 - /help – Displays this page.
 - /botinfo – info about ME!
 - /rules - Displays the rules of TheChatPlace
@@ -88,11 +85,19 @@ SPICY COMMANDS
 - /gulag <Person to send to the Gulag> <Length> <Possible Units: YEARS/Y | MONTHS/M | DAYS/D | HOURS/H | MINUTES/MIN | SECONDS/S> [OPTIONAL: Reason] – A command only available if it's invoked by a moderator, and if the bot is set as a moderator. Alias: /ban
 - /getdescription <u/> - PUBLIC! Get somebody's description.
 - /setdescription <Your new description> - DONATOR-ONLY! Sets your description to the specified description.
-- NEW /stats – Get the top 10 chatters in a room - Credit to BATMAN_5777 for the suggestion :D
-- NEW /urban <term> – Get the Urban Dictionary definition of something.
+- /stats – Get the top 10 chatters in a room - Credit to BATMAN_5777 for the suggestion :D
+- /bigstats <amount> – Get however many as you specified top chatters in a room
+- /urban <term> – Get the Urban Dictionary definition of something.
+- /rng <min> <max> – Generate a random number.
+- /chatroomstats – Get the top 10 rooms with the most messages
+- /bigchatroomstats <amount> – Get the top rooms with the most messages
+- /chatroomcount – How many chatbots have the ChatPlaceBot?
+- /pfp <person> – Get a link to someone's profile pic (luv u nav ;D)
+- /wyr – Would You Rather?
+- /rules – Get the rules of this chat - Moderators can set these rules with the /setrules command.
 
 A bot made by u/aWildGeodudeAppeared, for r/TheChatPlace.
-version: 0.5
-Donate at https://streamlabs.com/danielmensyt/tip (NOT WORKING D:) if you like the Bot!
+version: 1.0
+Donate at https://www.reddit.com/fkltc4 if you like the bot!
 Make sure to include your u/ in the donation, so you get premium perks. These include:
 The /setdescription command!
