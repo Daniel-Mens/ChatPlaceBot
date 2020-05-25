@@ -7,7 +7,7 @@ List of simple commands:
 6. /naenae – Lame Dead Meme Retard!
 7. /fart – Rip one out right away!
 8. /cry – Sadness is my only emotion.
-9. /wheeze – Lol it wasn’t even that funny.
+9. /wheeze – Lol it wasn’t even that funny.SPLITHERE
 10. /belch – BLAAAARGHH!
 11. /pout – This isn’t Instagram thot.
 12. /squat - Eat dat mayonez
@@ -17,7 +17,7 @@ List of simple commands:
 16. /wryy – Why is this a command?
 17. /vsco - Sksksksksksksk
 18. /psspss - PssPssPssPss
-19. /oink – Do it PIG.
+19. /oink – Do it PIG.SPLITHERE
 20. /crabrave – Its not a bad song. Right?
 21. /amen – for children of Jesus.
 22. /shrekapproves – Shrek is life.
@@ -27,7 +27,7 @@ List of simple commands:
 26. /hitler – The jews better run!
 27. /ghey – The mods’ favourite.
 28. /yeeeeeeet – Yaaaa Yeet
-29. /stare <object being stared at> – Stare.
+29. /stare <object being stared at> – Stare.SPLITHERE
 30. /holdback – HOLD HIM BACK!
 31. /rage – LET IT OUT!
 32. /challenge <Object being challenged> – I CHALLENGE THEE!
@@ -37,7 +37,7 @@ List of simple commands:
 36. /attacc <attaccee>– Too precious to be taken away!
 37. /commie – DO IT!
 38. /punch <puncher> <victim>  – Don’t fite pliz.
-39. /kick <kicker> <victim> – Don’t fite pliz.
+39. /kick <kicker> <victim> – Don’t fite pliz.SPLITHERE
 40. /dropkick <kicker> <victim> – Don’t fite pliz.
 41. /fatality <Deliverer> <Victim> – He gonna feel that.
 42. /throw <object> <victim>– Yeet something.
@@ -47,7 +47,7 @@ List of simple commands:
 46. /tongue – Not the kind you’re thinkin of.
 47. /laugh – It’s not that funny.
 48. /nervous - Ummmmmmmmmm
-49. /scared <object of terror> – I’m afraid. Help.
+49. /scared <object of terror> – I’m afraid. Help.SPLITHERE
 50. /shocked – WOW ,THAT’S NOT COOL.
 51. /betrayed <betrayer>  – HOW COULD YOU DO THIS!
 52. /hug <the worthy one> – C’mere you little shit!
@@ -57,7 +57,7 @@ List of simple commands:
 56. /thirsty <u/> – DAT BOI BE THIRSTY!
 57. /gamerule <gamerule> <value> – Minecraft reference.
 58. /whatislove – Come on, the song is catchy!
-59. /high5 <u/> - Bro..
+59. /high5 <u/> - Bro..SPLITHERE
 60. /lonely - feelsBadMan
 61. /dance - He just vibin'
 62. /smack <u/> - give em a smack in the face
@@ -67,15 +67,17 @@ List of simple commands:
 66. /give <u/> <item> <amount> – eBic gamer Minecraft reference.
 67. /zoinks <thing getting nuked> - Only using zero point three percent of his power.
 68. /vibin - Chill out bro.
-69. /nice - niicceeeeee
+69. /nice - niicceeeeeeSPLITHERE
 70. /gamemode <new gamemode> [optional: u/] - Sets your gamemode
-71. /8ball – Shake the magic eight ball! SPLIT-INTO-MULTIPLE-MESSAGES-HERESPICY COMMANDS
+71. /8ball – Shake the magic eight ball!
+
+SPICY COMMANDS
 - /help – Displays this page.
 - /botinfo – info about ME!
 - /rules - Displays the rules of TheChatPlace
 - /mods - Displays the mods of the chat it was sent in. Alias: /moderators
 - /news – gets a news post from today.
-- /yomama – Says a Yo Mama Joke.
+- /yomama – Says a Yo Mama Joke.SPLITHERE
 - /trivia – Starts a trivia question.
 - /tanswer – Gives the answer to that trivia question. (It has a timer delay)
 - /gettitle <u/> - Gives that user’s title given to them by a bot moderator/admin.
@@ -83,8 +85,9 @@ List of simple commands:
 - /trustfall - Start a trustfall, you hit the ground after 10 seconds unless someone catches you.
 - /catch – Catches the person who just trustfell
 - /gulag <Person to send to the Gulag> <Length> <Possible Units: YEARS/Y | MONTHS/M | DAYS/D | HOURS/H | MINUTES/MIN | SECONDS/S> [OPTIONAL: Reason] – A command only available if it's invoked by a moderator, and if the bot is set as a moderator. Alias: /ban
+- /ungulag <Person to remove from the Gulag> Alias: /unban
 - /getdescription <u/> - PUBLIC! Get somebody's description.
-- /setdescription <Your new description> - DONATOR-ONLY! Sets your description to the specified description.
+- /setdescription <Your new description> - DONATOR-ONLY! Sets your description to the specified description.SPLITHERE
 - /stats – Get the top 10 chatters in a room - Credit to BATMAN_5777 for the suggestion :D
 - /bigstats <amount> – Get however many as you specified top chatters in a room
 - /urban <term> – Get the Urban Dictionary definition of something.
@@ -94,10 +97,11 @@ List of simple commands:
 - /chatroomcount – How many chatbots have the ChatPlaceBot?
 - /pfp <person> – Get a link to someone's profile pic (luv u nav ;D)
 - /wyr – Would You Rather?
-- /rules – Get the rules of this chat - Moderators can set these rules with the /setrules command.
+- /rules – Get the rules of this chat - Moderators can set these rules with the /setrules command.SPLITHERE
+- /setexitmessage <Goodbye Message> - [MODERATOR-ONLY] Sets the message that CPB says when someone leaves. You can use "%USERNAME%" to customize it per user.
+- /setjoinmessage <Welcome Message> - [MODERATOR-ONLY] Sets the message that CPB says when someone joins. You can use "%USERNAME%" to customize it per user.
 
 A bot made by u/aWildGeodudeAppeared, for r/TheChatPlace.
 version: 1.0
-Donate at https://www.reddit.com/fkltc4 if you like the bot!
 Make sure to include your u/ in the donation, so you get premium perks. These include:
 The /setdescription command!

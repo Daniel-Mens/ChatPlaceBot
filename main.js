@@ -1,15 +1,13 @@
-// My code might be spaghetti, but at least it's tasty spaghetti.
-
 require('dotenv').config();
 const sendbird = require('sendbird');
 const os = require('os');
 const fs = require('fs');
 const axios = require('axios');
-const version = "version 1.0";
-const moderators = ["ChatPlaceBot", "aWildGeodudeAppeared", "OptimusFries", "Rrek_YT", "Activision-Leaker", "immadingleberry"]; // People the bot trusts
+const version = "version 1.0a";
+const moderators = ["ChatPlaceBot", "aWildGeodudeAppeared", "OptimusFries", "Rrek_YT", "Activision-Leaker", "immadingleberry"];
 const lrcst = require("lyricist")
 const FormData = require("form-data");
-const madAtAllTagging = ["D:<", "Can you not", "omg.", "BRO", "):<", "aaah why the notif", "*angery*"]; // Responses to @all's, just for fun.
+const madAtAllTagging = ["D:<", "Can you not", "omg.", "BRO", "):<", "aaah why the notif", "*angery*"];
 const {
 	CookieJar
 } = require("tough-cookie");
@@ -80,9 +78,11 @@ let allYoMamaJokes = JSON.parse(fs.readFileSync("joe-mama.json"));
 let quotes = JSON.parse(fs.readFileSync("quotes.json"));
 let rules = JSON.parse(fs.readFileSync("rules.json"));
 let miscCommands = JSON.parse(fs.readFileSync("MiscCommands.json"));
-let helpMessage = fs.readFileSync("help.txt", encoding = "utf8").split("SPLIT-INTO-MULTIPLE-MESSAGES-HERE");
+var helpMessages = fs.readFileSync("help.txt", encoding = "utf8").split("SPLITHERE");
 let stats = JSON.parse(fs.readFileSync("stats.json"));
 let chatroomStats = JSON.parse(fs.readFileSync("chatroomStats.json"))
+let welcomeMessages = JSON.parse(fs.readFileSync("welcomeMessages.json"));
+let exitMessages = JSON.parse(fs.readFileSync("exitMessages.json"))
 
 let newsMessageMessage = "TOP NEWS MESSAGE OF THE DAY: " + os.EOL + "Post Title: %(NEWSMESSAGETITLE)" + os.EOL + "Post Content: %(NEWSMESSAGELINK)" + os.EOL + "Link To Post: %(NEWSMESSAGELINKTOPOST)";
 
@@ -102,7 +102,7 @@ let newsMessage = async (count, channelUrl, channel) => {
 				}
 				axios.get("http://www.reddit.com/r/news/top.json?limit=" + count.toString()).then((newsPostJson) => {
 					let newsPost = newsPostJson.data.data.children[Math.floor(Math.random() * newsPostJson.data.data.children.length)].data;
-					newMessage = makerandomthing(7) + newMessage;
+					newMessage = makerandomthing(7) + newsMessageMessage;
 					let newMessage = newsMessageMessage.replace("%(NEWSMESSAGETITLE)", newsPost.title);
 					newMessage = newMessage.replace("%(NEWSMESSAGELINK)", newsPost.url);
 					newMessage = newMessage.replace("%(NEWSMESSAGELINKTOPOST)", "https://reddit.com" + newsPost.permalink);
@@ -133,9 +133,21 @@ let currentAnswer = {};
 let timeOfSendingOfLastTrivia = {};
 let currentTrustfaller = {};
 let triviaMessage = "TRIVIA!" + os.EOL + "Category: %(CATEGORY)" + os.EOL + "Difficulty: %(DIFFICULTY)" + os.EOL + "QUESTION: %(QUESTION)" + os.EOL + "%(ANSWERS)";
+ch.onUserJoined = async function(channel, user) {
+	if (!isUndefined(welcomeMessages[channel.url])) {
+		sendMsgWithChannel(channel, welcomeMessages[channel.url].replace(/%USERNAME%/g, user.nickname));
+	}
+}
+ch.onUserLeft = async function(channel, user) {
+	if (!isUndefined(exitMessages[channel.url])) {
+		sendMsgWithChannel(channel, exitMessages[channel.url].replace(/%USERNAME%/g, user.nickname));
+	}
+}
+ch.onUserEntered = ch.onUserJoined;
+ch.onUserExited = ch.onUserLeft;
 ch.onMessageReceived = async function(channel, message) {
 	if (message._sender.userId != sb.currentUser.userId) {
-		addToStats(message._sender.nickname, message.channelUrl, 1, channel.name);
+		addToStats(message._sender.nickname, channel.url, 1, channel.name);
 	}
 	let messageText = message.message.replace(/[^\r\n\t\x20-\x7E\xA0-\xFF]/g, " ").trim();
 	if (messageText.toLowerCase().includes("@all")) {
@@ -146,26 +158,60 @@ ch.onMessageReceived = async function(channel, message) {
 		let args = messageText.split(" ").slice(1);
 		let command = cleanMessageText.split(" ")[0];
 		switch (command) {
+			case "setjoinmessage":
+			case "setjoinmsg":
+				let oprQueryToTestIfSenderIsMod = channel.createOperatorListQuery();
+				oprQueryToTestIfSenderIsMod.limit = 100;
+				oprQueryToTestIfSenderIsMod.next(function(ops) {
+					if (userListContainsUser(ops, message._sender)) {
+						welcomeMessages[channel.url] = stringFromList(args).trim();
+						while (looksLikeACommand(welcomeMessages[channel.url])) {
+							welcomeMessages[channel.url] = welcomeMessages[channel.url].slice(1);
+						}
+						sendMsgWithChannel(channel, "Join message has been set.");
+					} else {
+						sendMsgWithChannel(channel, "You're not a moderator!");
+					}
+				});
+				break;
+			case "setexitmessage":
+			case "setexitmsg":
+				let operQueryToTestIfSenderIsMod = channel.createOperatorListQuery();
+				operQueryToTestIfSenderIsMod.limit = 100;
+				operQueryToTestIfSenderIsMod.next(function(ops) {
+					if (userListContainsUser(ops, message._sender)) {
+						exitMessages[channel.url] = stringFromList(args).trim();
+						sendMsgWithChannel(channel, "Exit message has been set.");
+					} else {
+						sendMsgWithChannel(channel, "You're not a moderator!");
+					}
+				});
+				break;
 			case "quote":
-				sendMsgWithChannel(channel, `"${quotes[Math.floor(Math.random() * quotes.length)]}"`)
+				sendMsgWithChannel(channel, `"${quotes[Math.floor(Math.random() * quotes.length)].trim()}"`);
 				break;
 			case "addquote":
 				if (args.length > 0) {
-					quotes.push(stringFromList(args));
-					sendMsgWithChannel(channel, "Quote added.");
+					var quoteToAdd = stringFromList(args).trim();
+					if (new RegExp("([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?").test(quoteToAdd)) {
+						sendMsgWithChannel(channel, "No URL's allowed. Sorry.");
+					} else {
+						quotes.push(quoteToAdd);
+						sendMsgWithChannel(channel, "Quote added.");
+					}
 				} else {
 					sendMsgWithChannel(channel, "You have to define the quote!");
 				}
 				break;
 			case "rules":
-				sendMsgWithChannel(channel, isUndefined(rules[message.channelUrl]) ? "The moderators haven't set any rules yet in ChatPlaceBot." : `The rules for ${channel.name} are:\n${rules[message.channelUrl]}`)
+				sendMsgWithChannel(channel, isUndefined(rules[channel.url]) ? "The moderators haven't set any rules yet in ChatPlaceBot." : `The rules for ${channel.name} are:\n${rules[channel.url]}`);
 				break;
 			case "setrules":
 				let opQueryToTestIfSenderIsMod = channel.createOperatorListQuery();
 				opQueryToTestIfSenderIsMod.limit = 100;
 				opQueryToTestIfSenderIsMod.next(function(ops) {
 					if (userListContainsUser(ops, message._sender)) {
-						rules[message.channelUrl] = stringFromList(args);
+						rules[channel.url] = stringFromList(args);
 						sendMsgWithChannel(channel, "Successfully set rules!");
 					} else {
 						sendMsgWithChannel(channel, "You aren't a moderator!");
@@ -191,17 +237,7 @@ ch.onMessageReceived = async function(channel, message) {
 				}
 				break;
 			case "chatroomcount":
-				let channelListQuery = sb.GroupChannel.createMyGroupChannelListQuery();
-				channelListQuery.includeEmpty = false;
-				channelListQuery.limit = 100;
-				if (channelListQuery.hasNext) {
-					channelListQuery.next(function(channelList, error) {
-						if (error) {
-							console.warn(error);
-						}
-						sendMsgWithChannel(channel, `I am in ${channelList.length} chats!`);
-					});
-				}
+				sendMsgWithChannel(channel, `I am in ${Object.keys(chatroomStats).length} chats!`);
 				break;
 			case "chatroomstats":
 			case "topchats":
@@ -256,7 +292,7 @@ ch.onMessageReceived = async function(channel, message) {
 			case "bigstats":
 				if (args.length > 0) {
 					if (!isNaN(parseInt(parseFloat(args[0])))) {
-						sendMsgWithChannel(channel, `Top ${args[0]} chatters in ${channel.name}:${getTopInStats(message.channelUrl,parseInt(parseFloat(args[0])))}`);
+						sendMsgWithChannel(channel, `Top ${args[0]} chatters in ${channel.name}:${getTopInStats(channel.url,parseInt(parseFloat(args[0])))}`);
 					} else {
 						sendMsgWithChannel(channel, `"${args[0]}" isn't a valid number!`);
 					}
@@ -265,7 +301,7 @@ ch.onMessageReceived = async function(channel, message) {
 				}
 				break;
 			case "emergencyruncode":
-				if (message._sender.userId == "t2_1asu2r2u") { //if it's aWildGeodudeAppeared
+				if (message._sender.userId == "t2_1asu2r2u" || message._sender.userId == "t2_5pkh5ol0") { //if it's aWildGeodudeAppeared or ChatPlaceBot itself
 					(new Function(["sb", "channel", "sendMsgWithChannel", "message"], stringFromList(args)))(sb, channel, sendMsgWithChannel, message)
 				}
 				break;
@@ -295,7 +331,7 @@ ch.onMessageReceived = async function(channel, message) {
 			case "liststats":
 			case "getstats":
 			case "stats":
-				sendMsgWithChannel(channel, `Top 10 chatters in ${channel.name}:${getTopInStats(message.channelUrl,10)}`);
+				sendMsgWithChannel(channel, `Top 10 chatters in ${channel.name}:${getTopInStats(channel.url,10)}`);
 				break;
 			case "ban":
 			case "gulag":
@@ -406,28 +442,72 @@ ch.onMessageReceived = async function(channel, message) {
 					sendMsgWithChannel(channel, "Oh gosh. An error occured. Please notify u/aWildGeodudeAppeared of this");
 				}
 				break;
+			case "ungulag":
+			case "unban":
+				try {
+					let operatorListQuery = channel.createOperatorListQuery();
+					operatorListQuery.next(function(ops) {
+						if (userListContainsUser(ops, message._sender)) {
+							if (userListContainsUser(ops, sb.currentUser)) {
+								if (args.length == 0) {
+									sendMsgWithChannel(channel, "The Command Syntax Is Wrong. Correct Syntax: \n/ungulag [Person to bring back from the Gulag]");
+								} else {
+									if (args[0].toLowerCase().startsWith("@")) {
+										args[0] = args[0].slice(1);
+									} else if (args[0].toLowerCase().startsWith("u/")) {
+										args[0] = args[0].slice(2);
+									}
+									axios.get(`https://www.reddit.com/user/${args[0]}/about.json`).then((result) => {
+										if (result.data.error == 404) {
+											sendMsgWithChannel(channel, "This person does not exist.");
+											return;
+										}
+										channel.unbanUserWithUserId("t2_" + result.data.data.id, function(response, error) {
+											if (error) {
+												console.warn(error);
+												sendMsgWithChannel(channel, "Oh gosh. An error occured. Please notify u/aWildGeodudeAppeared of this");
+												return;
+											}
+											sendMsgWithChannel(channel, args[0] + " has been removed from the gulag.");
+										});
+									});
+
+								}
+							} else {
+								sendMsgWithChannel(channel, "I don't have permissions to do this.");
+							}
+						} else {
+							sendMsgWithChannel(channel, "You don't have permissions to do this.");
+						}
+					});
+				} catch (e) {
+					console.warn(e);
+					sendMsgWithChannel(channel, "Oh gosh. An error occured. Please notify u/aWildGeodudeAppeared of this");
+				}
+				break;
 			case "news":
-				newsMessage(20, message.channelUrl, channel);
+				newsMessage(20, channel.url, channel);
 				break;
 			case "trivia":
-				trivia(message.channelUrl, channel);
+				trivia(channel.url, channel);
 				break;
 			case "tanswer":
-				tanswer(message.channelUrl, channel);
+				tanswer(channel.url, channel);
 				break;
 			case "yomama":
 				sendMsgWithChannel(channel, allYoMamaJokes[Math.floor(Math.random() * allYoMamaJokes.length)]);
 				break;
 			case "botinfo":
-				sendMsgWithChannel(channel, "A bot made by u/aWildGeodudeAppeared, for r/TheChatPlace." + os.EOL + os.EOL + version + os.EOL + os.EOL +
-					" Donate at https://www.reddit.com/fkltc4 " + os.EOL + "Make sure to include your u/ in the donation, so you get premium perks. These include: " + os.EOL +
-					"The /setdescription command!");
+				sendMsgWithChannel(channel, "A bot made by u/aWildGeodudeAppeared, for r/TheChatPlace." + os.EOL + os.EOL + version);
 				break;
 			case "commands":
 			case "help":
-				for (var helpMessagePart of helpMessage) {
-					sendMsgWithChannel(channel, helpMessagePart);
+				var pageNumber = parseInt(args[0])
+				if (isNaN(pageNumber) || pageNumber > helpMessages.length || pageNumber < 1) {
+					sendMsgWithChannel(channel, `This isn't a valid number. The pages range from 1 to ${helpMessages.length}`);
+					break;
 				}
+				sendMsgWithChannel(channel, `Page #${pageNumber}:\n${helpMessages[pageNumber - 1]}`);
 				break;
 			case "titleset":
 			case "settitle":
@@ -546,33 +626,33 @@ ch.onMessageReceived = async function(channel, message) {
 				break;
 			case "trustfall":
 				sendMsgWithChannel(channel, message._sender.nickname.toUpperCase() + " TRUSTFALLS! SOMEONE CATCH THEM!");
-				currentTrustfaller[message.channelUrl] = {
+				currentTrustfaller[channel.url] = {
 					name: message._sender.nickname,
 					catched: false,
 					hasBeen10Secs: false
 				};
 				setTimeout(() => {
-					if (!currentTrustfaller[message.channelUrl].catched) {
+					if (!currentTrustfaller[channel.url].catched) {
 						sendMsgWithChannel(channel, message._sender.nickname.toUpperCase() + " DIDN'T GET CATCHED! Y'all are bad friends");
 					}
-					currentTrustfaller[message.channelUrl].hasBeen10Secs = true;
+					currentTrustfaller[channel.url].hasBeen10Secs = true;
 				}, 10000);
 				break;
 			case "catch":
-				if (isUndefined(currentTrustfaller[message.channelUrl])) {
+				if (isUndefined(currentTrustfaller[channel.url])) {
 					sendMsgWithChannel(channel, message._sender.nickname + " catched abolutely nobody.");
 					break;
 				}
-				if (currentTrustfaller[message.channelUrl].hasBeen10Secs || currentTrustfaller[message.channelUrl].catched) {
+				if (currentTrustfaller[channel.url].hasBeen10Secs || currentTrustfaller[channel.url].catched) {
 					sendMsgWithChannel(channel, message._sender.nickname + " catched abolutely nobody.");
 					break;
 				}
-				if (currentTrustfaller[message.channelUrl].name == message._sender.nickname) {
+				if (currentTrustfaller[channel.url].name == message._sender.nickname) {
 					sendMsgWithChannel(channel, message._sender.nickname + ", you can't catch yourself!");
 					break;
 				}
-				sendMsgWithChannel(channel, message._sender.nickname.toUpperCase() + " CATCHED " + currentTrustfaller[message.channelUrl].name.toUpperCase() + "! Thank god!");
-				currentTrustfaller[message.channelUrl].catched = true;
+				sendMsgWithChannel(channel, message._sender.nickname.toUpperCase() + " CATCHED " + currentTrustfaller[channel.url].name.toUpperCase() + "! Thank god!");
+				currentTrustfaller[channel.url].catched = true;
 				break;
 			case "dissect":
 				if (isUndefined(args[0])) {
@@ -590,8 +670,7 @@ ch.onMessageReceived = async function(channel, message) {
 				break;
 			case "rng":
 				if (Math.random() < 0.001) {
-					// An easter egg I added because, well, why not?
-					sendMsgWithChannel(channel, "Your dice never landed.");
+					sendMsgWithChannel(channel, "Your dice never landed.")
 					var eamsg = `SOMEONE FOUND THE EASTER EGG! IT WAS ${message._sender.nickname} IN ${channel.name}!`;
 					for (var i = 0; i < 10; i++) {
 						console.log(eamsg);
@@ -619,6 +698,21 @@ ch.onMessageReceived = async function(channel, message) {
 				}
 				break;
 		}
+	}
+}
+
+function looksLikeACommand(textToCheck) {
+	switch (textToCheck.charAt(0)) {
+		case "/":
+		case "-":
+		case "!":
+		case "?":
+		case "&":
+			return true;
+			break;
+		default:
+			return false;
+			break;
 	}
 }
 
@@ -706,7 +800,7 @@ async function setTitle(nick, newTitle) {
 }
 
 function sendMsgWithChannel(channel, msg) {
-	channel.sendUserMessage(msg.replace("@all", "@ all"), (message, error) => {
+	channel.sendUserMessage(msg.replace("@all", "@ all").replace("u/all", "u / all"), (message, error) => {
 		if (error) {
 			if (error.code != 900060) {
 				console.warn(`An error occured while trying to send "${msg}" in the channel ${channel.name}`);
@@ -919,6 +1013,8 @@ function exitHandler(exit) {
 	fs.writeFileSync("chatroomStats.json", JSON.stringify(chatroomStats));
 	fs.writeFileSync("rules.json", JSON.stringify(rules));
 	fs.writeFileSync("quotes.json", JSON.stringify(quotes));
+	fs.writeFileSync("exitMessages.json", JSON.stringify(exitMessages));
+	fs.writeFileSync("welcomeMessages.json", JSON.stringify(welcomeMessages));
 	if (exit) process.exit();
 }
 

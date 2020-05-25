@@ -1,5 +1,7 @@
 # ChatPlaceBot
 
+##CHATPLACEBOT IS OFFICIALLY DISCONTINUED.
+
 ## Miscellaneous Command Syntax
 
 These are commands that are only in here for fun or small tasks that don't need seperate programming
